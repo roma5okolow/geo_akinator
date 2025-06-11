@@ -12,9 +12,11 @@ class BoundedLatLonRegressor(nn.Module):
     def __init__(self, input_dim):
         super().__init__()
         self.mlp = nn.Sequential(
-            nn.Linear(input_dim, 128),
+            nn.Linear(input_dim, 256),
             nn.ReLU(),
-            nn.Linear(128, 2),
+	        nn.Linear(256, 64),
+            nn.ReLU(),
+            nn.Linear(64, 2),
             nn.Tanh()
         )
 
@@ -40,7 +42,7 @@ class BertForLatLonCosineLoss(BertPreTrainedModel):
 
 @st.cache_resource
 def load_model():
-    model_path = "model"
+    model_path = "./model"
     config = BertConfig.from_pretrained(model_path)
     model = BertForLatLonCosineLoss.from_pretrained(model_path, config=config)
     tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
